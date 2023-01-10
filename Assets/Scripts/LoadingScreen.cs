@@ -40,9 +40,10 @@ public class LoadingScreen : MonoBehaviour
         "TRR variable ranges disabled:",
         "86/PAT: Configuration [0-7]: WB WC UC- UC WB WC UC- WT",
         "TRR: Disabled",
-        "usable",
-        "reserved",
-        "reserved",
+        "  ()",
+        "  ||  usable",
+        "  ||  reserved",
+        "()||()reserved",
         "usable",
         "ACPI data",
         "reserved",
@@ -65,6 +66,7 @@ public class LoadingScreen : MonoBehaviour
         "VBOXXSDT 00000001 ASL 00000061)",
         "VBOXFACP 00000001 ASL 00000061)",
         "VBOXBIOS 00000002 INTL 20100528)",
+        "Мать в норме",
         "Мать в норме"
     };
     
@@ -87,7 +89,7 @@ public class LoadingScreen : MonoBehaviour
             text.text = _text[i];
             scrollRect.value = 0;
         }
-        yield return null;
+        yield return new WaitForSeconds(3f);
         closeWindow.SetActive(false);
         
     }
