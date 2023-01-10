@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Application : MonoBehaviour
+public class ApplicationIcon : MonoBehaviour
 {
     public GameObject applicationWindow;
 
