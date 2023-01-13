@@ -1,14 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-namespace DefaultNamespace
+public class ApplicationExit : MonoBehaviour
 {
-    public class ApplicationExit : MonoBehaviour
-    {
-        public GameObject applicationWindow;
+    public GameObject applicationWindow;
+    public Action exitEvent;
 
-        public void ExitFromApplication()
-        {
-            applicationWindow.SetActive(false);
-        }
+    public void ExitFromApplication()
+    {
+        exitEvent?.Invoke();
+        applicationWindow.SetActive(false);
     }
 }

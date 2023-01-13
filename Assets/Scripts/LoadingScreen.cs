@@ -10,6 +10,7 @@ public class LoadingScreen : MonoBehaviour
     public GameObject loadingWindows;
     public GameObject loadingText;
     public Scrollbar scrollRect;
+    public AudioSource workWindowsMusic;
 
     private readonly string[] _text = {
         "Initializing cgroup subsys cpuset",
@@ -41,9 +42,12 @@ public class LoadingScreen : MonoBehaviour
         "86/PAT: Configuration [0-7]: WB WC UC- UC WB WC UC- WT",
         "TRR: Disabled",
         "  ()",
-        "  ||  usable",
-        "  ||  reserved",
-        "()||()reserved",
+        "  ||  ",
+        "  ||  ",
+        "()||()",
+        "usable",
+        "reserved",
+        "reserved",
         "usable",
         "ACPI data",
         "reserved",
@@ -63,11 +67,11 @@ public class LoadingScreen : MonoBehaviour
         "CPI: FACP 0x000000007FFF00F0 0000F4 (v04 VBOX",
         "CPIS DSDT 0X000000007FFFD470 002118 (với VBOX",
         "CPI: FACS 8x000000007FFF8200 000040",
+        "Мать в норме",
+        "Мать топ",
         "VBOXXSDT 00000001 ASL 00000061)",
         "VBOXFACP 00000001 ASL 00000061)",
         "VBOXBIOS 00000002 INTL 20100528)",
-        "Мать в норме",
-        "Мать в норме"
     };
     
     private void Start()
@@ -91,6 +95,7 @@ public class LoadingScreen : MonoBehaviour
         }
         yield return new WaitForSeconds(3f);
         closeWindow.SetActive(false);
-        
+        workWindowsMusic.Play();
+        StartCoroutine(SystemController.Instance.OnSystemStart());
     }
 }

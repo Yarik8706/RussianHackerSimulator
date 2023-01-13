@@ -2,14 +2,13 @@ using UnityEngine;
 
 public class Piece : MonoBehaviour
 {
-    public Board board { get; private set; }
-    public TetrominoData data { get; private set; }
-    public Vector3Int[] cells { get; private set; }
-    public Vector3Int position { get; private set; }
-    public int rotationIndex { get; private set; }
+    public Board Board { get; private set; }
+    public TetrominoData Data { get; private set; }
+    public Vector3Int[] Cells { get; private set; }
+    public Vector3Int Position { get; private set; }
+    public int RotationIndex { get; private set; }
 
     public float stepDelay = 1f;
-    public float moveDelay = 0.1f;
     public float lockDelay = 0.5f;
 
     private float stepTime;
@@ -18,27 +17,28 @@ public class Piece : MonoBehaviour
 
     public void Initialize(Board board, Vector3Int position, TetrominoData data)
     {
-        this.data = data;
-        this.board = board;
-        this.position = position;
+        Data = data;
+        Board = board;
+        Position = position;
 
-        rotationIndex = 0;
+        RotationIndex = 0;
         stepTime = Time.time + stepDelay;
-        moveTime = Time.time + moveDelay;
+        moveTime = Time.time + board.moveDelay;
         lockTime = 0f;
 
-        if (cells == null) {
-            cells = new Vector3Int[data.cells.Length];
+        if (Cells == null) {
+            Cells = new Vector3Int[data.cells.Length];
         }
 
-        for (int i = 0; i < cells.Length; i++) {
-            cells[i] = (Vector3Int)data.cells[i];
+        for (int i = 0; i < Cells.Length; i++) {
+            Cells[i] = (Vector3Int)data.cells[i];
         }
     }
 
     private void Update()
     {
-        board.Clear(this);
+        if(Board == null) return;
+        Board.Clear(this);
 
         // We use a timer to allow the player to make adjustments to the piece
         // before it locks in place
@@ -67,7 +67,7 @@ public class Piece : MonoBehaviour
             Step();
         }
 
-        board.Set(this);
+        Board.Set(this);
     }
 
     private void HandleMoveInputs()
@@ -113,24 +113,24 @@ public class Piece : MonoBehaviour
 
     private void Lock()
     {
-        board.Set(this);
-        board.ClearLines();
-        board.SpawnPiece();
+        Board.Set(this);
+        Board.ClearLines();
+        Board.SpawnPiece();
     }
 
     private bool Move(Vector2Int translation)
     {
-        Vector3Int newPosition = position;
+        Vector3Int newPosition = Position;
         newPosition.x += translation.x;
         newPosition.y += translation.y;
 
-        bool valid = board.IsValidPosition(this, newPosition);
+        bool valid = Board.IsValidPosition(this, newPosition);
 
         // Only save the movement if the new position is valid
         if (valid)
         {
-            position = newPosition;
-            moveTime = Time.time + moveDelay;
+            Position = newPosition;
+            moveTime = Time.time + Board.moveDelay;
             lockTime = 0f; // reset
         }
 
@@ -141,32 +141,32 @@ public class Piece : MonoBehaviour
     {
         // Store the current rotation in case the rotation fails
         // and we need to revert
-        int originalRotation = rotationIndex;
+        int originalRotation = RotationIndex;
 
         // Rotate all of the cells using a rotation matrix
-        rotationIndex = Wrap(rotationIndex + direction, 0, 4);
+        RotationIndex = Wrap(RotationIndex + direction, 0, 4);
         ApplyRotationMatrix(direction);
 
         // Revert the rotation if the wall kick tests fail
-        if (!TestWallKicks(rotationIndex, direction))
+        if (!TestWallKicks(RotationIndex, direction))
         {
-            rotationIndex = originalRotation;
+            RotationIndex = originalRotation;
             ApplyRotationMatrix(-direction);
         }
     }
 
     private void ApplyRotationMatrix(int direction)
     {
-        float[] matrix = Data.RotationMatrix;
+        float[] matrix = global::Data.RotationMatrix;
 
         // Rotate all of the cells using the rotation matrix
-        for (int i = 0; i < cells.Length; i++)
+        for (int i = 0; i < Cells.Length; i++)
         {
-            Vector3 cell = cells[i];
+            Vector3 cell = Cells[i];
 
             int x, y;
 
-            switch (data.tetromino)
+            switch (Data.tetromino)
             {
                 case Tetromino.I:
                 case Tetromino.O:
@@ -183,7 +183,7 @@ public class Piece : MonoBehaviour
                     break;
             }
 
-            cells[i] = new Vector3Int(x, y, 0);
+            Cells[i] = new Vector3Int(x, y, 0);
         }
     }
 
@@ -191,9 +191,9 @@ public class Piece : MonoBehaviour
     {
         int wallKickIndex = GetWallKickIndex(rotationIndex, rotationDirection);
 
-        for (int i = 0; i < data.wallKicks.GetLength(1); i++)
+        for (int i = 0; i < Data.wallKicks.GetLength(1); i++)
         {
-            Vector2Int translation = data.wallKicks[wallKickIndex, i];
+            Vector2Int translation = Data.wallKicks[wallKickIndex, i];
 
             if (Move(translation)) {
                 return true;
@@ -211,7 +211,7 @@ public class Piece : MonoBehaviour
             wallKickIndex--;
         }
 
-        return Wrap(wallKickIndex, 0, data.wallKicks.GetLength(0));
+        return Wrap(wallKickIndex, 0, Data.wallKicks.GetLength(0));
     }
 
     private int Wrap(int input, int min, int max)
