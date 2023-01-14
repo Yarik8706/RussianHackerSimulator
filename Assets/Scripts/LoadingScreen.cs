@@ -68,7 +68,6 @@ public class LoadingScreen : MonoBehaviour
         "CPIS DSDT 0X000000007FFFD470 002118 (với VBOX",
         "CPI: FACS 8x000000007FFF8200 000040",
         "Мать в норме",
-        "Мать топ",
         "VBOXXSDT 00000001 ASL 00000061)",
         "VBOXFACP 00000001 ASL 00000061)",
         "VBOXBIOS 00000002 INTL 20100528)",

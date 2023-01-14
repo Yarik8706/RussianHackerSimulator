@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    path: Assets/Scenes/MainMenu.unity
+    guid: e86ac64ab48a7fb42a6f12d4c0424938
+  - enabled: 1
+    path: Assets/Scenes/Pacman.unity
+    guid: c7089bfe15a72bc498141ddeeec188b5
+  - enabled: 1
+    path: Assets/Scenes/Tetris.unity
+    guid: d9b9ee4d3666043449fa8cc1b73cf16d
+  - enabled: 1
+    path: Assets/Scenes/Workspace.unity
+    guid: 18291e335feb406438058b07fe11f7e6
   m_configObjects: {}
