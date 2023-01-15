@@ -37,12 +37,12 @@ public class Piece : MonoBehaviour
 
     private void Update()
     {
+        if(Board == null) return;
         if (Board.CheckNeedCount())
         {
             Board.Win();
             return;
         }
-        if(Board == null) return;
         Board.Clear(this);
 
         // We use a timer to allow the player to make adjustments to the piece

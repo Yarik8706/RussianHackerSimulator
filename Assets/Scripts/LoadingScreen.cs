@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,9 @@ public class LoadingScreen : MonoBehaviour
     public GameObject loadingText;
     public Scrollbar scrollRect;
     public AudioSource workWindowsMusic;
+    public Slider loadingSlider;
+    public GameObject windowsLoading;
+    public GameObject userLoading;
 
     private readonly string[] _text = {
         "Initializing cgroup subsys cpuset",
@@ -78,8 +82,9 @@ public class LoadingScreen : MonoBehaviour
         StartCoroutine(LoadingCourotine());
     }
 
-    private IEnumerator LoadingCourotine()
+    public IEnumerator LoadingCourotine()
     {
+        closeWindow.SetActive(true);
         for (int i = 0; i <= startCountText; i++)
         {
             var text = Instantiate(loadingText, loadingWindows.transform).GetComponent<Text>();
@@ -92,9 +97,26 @@ public class LoadingScreen : MonoBehaviour
             text.text = _text[i];
             scrollRect.value = 0;
         }
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         closeWindow.SetActive(false);
         workWindowsMusic.Play();
+        windowsLoading.SetActive(true);
+
+        for (int i = 0; i <= 98; i++)
+        {
+            yield return new WaitForSeconds(0.1f);
+            loadingSlider.value += 1;
+        }
+
+        yield return new WaitForSeconds(1f);
+        loadingSlider.value = loadingSlider.maxValue;
+        
+        windowsLoading.SetActive(false);
+        
+        userLoading.SetActive(true);
+        yield return new WaitForSeconds(3.5f);
+        userLoading.SetActive(false);
+
         StartCoroutine(SystemController.Instance.OnSystemStart());
     }
 }

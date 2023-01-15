@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +9,7 @@ public class GameManager : MonoBehaviour
     public Pacman pacman;
     public Movement[] activeFigure;
     public Transform pellets;
-    public AudioSource backGroundMusic;
+    public GameObject game;
 
     public Text gameOverText;
     public Text scoreText;
@@ -17,6 +18,11 @@ public class GameManager : MonoBehaviour
     public int ghostMultiplier { get; private set; } = 1;
     public int score { get; private set; }
     public int lives { get; private set; }
+
+    private void Awake()
+    {
+        BzlomatorController.Instance.pacmanManager = this;
+    }
 
     private void Start()
     {
@@ -36,7 +42,7 @@ public class GameManager : MonoBehaviour
         SetScore(0);
         SetLives(3);
         SetActiveFigureState(false);
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(4.5f);
         SetActiveFigureState(true);
     }
 
@@ -121,8 +127,14 @@ public class GameManager : MonoBehaviour
         if (!HasRemainingPellets())
         {
             pacman.gameObject.SetActive(false);
-            Invoke(nameof(NewRound), 3f);
+            //Invoke(nameof(NewRound), 3f);
+            Win();
         }
+    }
+
+    public void Win()
+    {
+        BzlomatorController.Instance.EndHackSait();
     }
 
     public void PowerPelletEaten(PowerPellet pellet)
