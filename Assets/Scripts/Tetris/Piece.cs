@@ -37,6 +37,11 @@ public class Piece : MonoBehaviour
 
     private void Update()
     {
+        if (Board.CheckNeedCount())
+        {
+            Board.Win();
+            return;
+        }
         if(Board == null) return;
         Board.Clear(this);
 

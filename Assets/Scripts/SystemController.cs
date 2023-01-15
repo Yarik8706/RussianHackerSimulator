@@ -6,6 +6,7 @@ public class SystemController : MonoBehaviour
 {
     public GameObject helloWindow;
     public GameObject trashProblemWindow;
+    public AudioSource startWindowsMusic;
 
     public static SystemController Instance;
 
@@ -16,7 +17,8 @@ public class SystemController : MonoBehaviour
 
     public IEnumerator OnSystemStart()
     {
-        yield return new WaitForSeconds(0.8f);
+        startWindowsMusic.Play();
+        yield return new WaitForSeconds(1f);
         helloWindow.SetActive(true);
     }
 

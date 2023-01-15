@@ -7,6 +7,8 @@ public class SystemConnectionSetting : MonoBehaviour
     public ApplicationExit applicationExit;
     public GameObject newMessageWindow;
     public GameObject connectionReturnState;
+    public GameObject notConnectionText;
+    public GameObject hasConnectionText;
 
     public static bool InternetConnectionState;
     
@@ -16,7 +18,7 @@ public class SystemConnectionSetting : MonoBehaviour
         StartCoroutine(UpdateConnection());
     }
 
-    public IEnumerator UpdateConnection()
+    private IEnumerator UpdateConnection()
     {
         connectionMusic.Play();
         ProgressBar.Instance.progressSlider.gameObject.SetActive(true);
@@ -30,6 +32,8 @@ public class SystemConnectionSetting : MonoBehaviour
         yield return new WaitForSeconds(connectionMusic.clip.length - connectionMusic.time);
         ProgressBar.Instance.progressSlider.gameObject.SetActive(false);
         connectionReturnState.SetActive(true);
+        notConnectionText.SetActive(false);
+        hasConnectionText.SetActive(true);
         InternetConnectionState = true;
         applicationExit.exitEvent = () =>
         {

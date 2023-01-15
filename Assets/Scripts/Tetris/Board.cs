@@ -1,6 +1,8 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 public class Board : MonoBehaviour
 {
@@ -16,13 +18,17 @@ public class Board : MonoBehaviour
     public TetrominoData[] tetrominoes;
     public TMP_Text activeScoreText;
     public TMP_Text requiredScoreCountText;
+    public GameObject winWindow;
+    public TMP_Text winText;
+    public GameObject tetrisGame;
     [Header("Parametrs")]
     public Vector2Int boardSize = new (10, 20);
     public Vector3Int spawnPosition = new (-1, 8, 0);
-    public int requiredScoreCount = 2000;
+    public int requiredScoreCount = 3000;
     public int activeScoreCount = 0;
     public float moveDelay = 0.1f;
 
+    public string victim;
     public bool isStart;
     
     public RectInt Bounds {
@@ -35,13 +41,18 @@ public class Board : MonoBehaviour
 
     private void Awake()
     {
+        BzlomatorController.Instance.tetrisBoard = this;
         Tilemap = GetComponentInChildren<Tilemap>();
         ActivePiece = GetComponentInChildren<Piece>();
 
         for (int i = 0; i < tetrominoes.Length; i++) {
             tetrominoes[i].Initialize();
         }
+    }
 
+    public void SetScoreCountText(int count)
+    {
+        requiredScoreCount = count;
         requiredScoreCountText.text = "Нужно набрать: " + requiredScoreCount;
     }
 
@@ -174,6 +185,25 @@ public class Board : MonoBehaviour
     private void UpdateTextScoreCount()
     {
         activeScoreText.text = "Набрано очков: " + activeScoreCount;
+    }
+
+    public bool CheckNeedCount()
+    {
+        return requiredScoreCount <= activeScoreCount;
+    }
+
+    public void Win()
+    {
+        if(!isStart) return;
+        isStart = false;
+        winWindow.SetActive(true);
+        winText.text += victim;
+        Invoke(nameof(End), 1.5f);
+    }
+
+    public void End()
+    {
+        BzlomatorController.Instance.EndHackOnMail();
     }
 
     public void LineClear(int row)
